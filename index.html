@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <canvas></canvas>
+    <button onclick="confrim()">Click Here</button>
+
+    <img src="" id="img_show" alt="">
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-storage.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyD5HKkjOWvgF508cjlkmAQWmi30rRpHNe0",
+        authDomain: "ajax-6a13e.firebaseapp.com",
+        databaseURL: "https://ajax-6a13e.firebaseio.com",
+        projectId: "ajax-6a13e",
+        storageBucket: "ajax-6a13e.appspot.com",
+        messagingSenderId: "876203674377",
+        appId: "1:876203674377:web:4ccff3a0bab39c746861d8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script>
+        var canvas = document.querySelector("canvas");
+        var signaturePad = new SignaturePad(canvas);
+        var img_show = document.getElementById("img_show");
+        function confrim () {
+            var data = signaturePad.toDataURL();
+            var fileName = `${Date.now()}.png`;
+            // Create a root reference
+            var storageRef = firebase.storage().ref();
+            var mountainsRef = storageRef.child(fileName);
+            mountainsRef.putString(data, 'data_url').then(function(snapshot) {
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    console.log(downloadURL);
+                    img_show.src = downloadURL;
+                });                
+            });
+        }
+    </script>
+</body>
+</html>
